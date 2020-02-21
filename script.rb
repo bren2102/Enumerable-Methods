@@ -4,15 +4,24 @@ module Enumerable
       yield (self[i])
     end
   end
-  
-  # def my_each_with_index
-  #   for i in 0...self.length
-  #     yield (self[i],i)
-  #   end
-  # end
 
-  def my_select
+=begin
+  def my_each_with_index
+    for i in 0...self.length
+      yield (self[i] , i)
+    end
   end
+=end
+  
+  def my_select
+    for i in 0...self.length
+      if yield(self[i]) < 3
+        temp<<yield(self[i])
+        new_array=temp.to_a
+      end
+    end
+  end
+
   def my_all?
   end
   def my_any?
@@ -39,6 +48,11 @@ end
 
 array=[2,4,5]
 
-array.my_each do |num| puts num end
+#array.my_each do |num| puts num end
+=begin
+array.my_each_with_index do |num,index| 
+  puts "#{num}, #{index}"
+end
+=end
 
-#array.my_each_with_index do |num,index| puts {num, index} end
+array.my_select do |num| puts num end

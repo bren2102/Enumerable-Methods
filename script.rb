@@ -4,8 +4,13 @@ module Enumerable
       yield (self[i])
     end
   end
-  def my_each_with_index
-  end
+  
+  # def my_each_with_index
+  #   for i in 0...self.length
+  #     yield (self[i],i)
+  #   end
+  # end
+
   def my_select
   end
   def my_all?
@@ -34,4 +39,6 @@ end
 
 array=[2,4,5]
 
-array.my_each do |num| puts {num+''} end
+array.my_each do |num| puts num end
+
+#array.my_each_with_index do |num,index| puts {num, index} end

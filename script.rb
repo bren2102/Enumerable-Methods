@@ -1,5 +1,8 @@
 module Enumerable
   def my_each
+    for i in 0...self.length
+      yield (self[i])
+    end
   end
   def my_each_with_index
   end
@@ -29,5 +32,6 @@ def multiply_els(array)
   print aux
 end
 
+array=[2,4,5]
 
-multiply_els([2,4,5])
+array.my_each do |num| puts {num+''} end

@@ -2,6 +2,8 @@ module Enumerable
   def my_each
     i = 0
     while i < length
+      return to_enum unless block_given?
+
       yield(self[i])
       i += 1
     end
@@ -10,6 +12,8 @@ module Enumerable
   def my_each_with_index
     i = 0
     while i < length
+      return to_enum unless block_given?
+
       yield(self[i], i)
       i += 1
     end
@@ -19,6 +23,8 @@ module Enumerable
     temp = []
     i = 0
     while i < length
+      return to_enum unless block_given?
+
       temp << self[i] if yield(self[i])
       i += 1
     end
@@ -97,7 +103,8 @@ def multiply_els(array)
 end
 
 array = [2, 4, 5]
-
+puts [2, 4, 5].my_select
+=begin
 puts 'Test my_each method:'
 array.my_each do |num|
   puts num
@@ -153,3 +160,4 @@ puts result
 
 puts 'Test multiply_els with my_inject'
 puts multiply_els(array)
+=end

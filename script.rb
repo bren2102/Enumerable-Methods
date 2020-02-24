@@ -65,12 +65,17 @@ module Enumerable
     cont
   end
 
-  def my_map
+  def my_map(my_proc = nil)
     temp = []
     i = 0
     while i < length
-      temp << yield(self[i])
-      i += 1
+      if my_proc
+        temp << my_proc.call(self[i])
+        i += 1
+      else
+        temp << yield(self[i])
+        i += 1
+      end
     end
     temp
   end
@@ -93,7 +98,7 @@ def multiply_els(array)
 end
 
 array = [2, 4, 5]
-=begin
+
 puts 'Test my_each method:'
 array.my_each do |num|
   puts num
@@ -135,9 +140,10 @@ end
 puts result
 
 puts 'Test my_map method:'
-result = array.my_map do |num|
+my_proc = Proc.new do |num|
   num * 2
 end
+result = array.my_map(my_proc)
 puts result
 
 puts 'Test my_inject method:'
@@ -145,6 +151,6 @@ result = array.my_inject do |num, n|
   num + n
 end
 puts result
-=end
+
 puts 'Test multiply_els with my_inject'
 puts multiply_els(array)

@@ -22,7 +22,14 @@ module Enumerable
   end
 
   def my_all?
+    for i in 0...self.length
+      if yield(self[i]) && yield(self[i+1])
+        puts "Yes"
+      else
+        puts "No"
+    end
   end
+  
   def my_any?
   end
   def my_none?
@@ -52,3 +59,5 @@ array.my_each do |num| puts num end
 array.my_each_with_index do |num,index| puts "#{num}, #{index}" end
 
 puts array.my_select { |num| num < 3 }
+
+puts array.my_all? { |num| num < 3 }

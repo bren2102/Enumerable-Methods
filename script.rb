@@ -27,26 +27,30 @@ module Enumerable
         return true
       else
         return false
+      end
     end
   end
-  
+ 
   def my_any?
     for i in 0...self.length
       if yield(self[i]) || yield(self[i+1])
         return true
       else
         return false
+      end
     end
   end
-
+ 
   def my_none?
     for i in 0...self.length
       if !yield(self[i])
         return true
       else
         return false
+      end
     end
   end
+
   def my_count
   end
   def my_map
@@ -73,4 +77,8 @@ array.my_each_with_index do |num,index| puts "#{num}, #{index}" end
 
 puts array.my_select { |num| num < 3 }
 
-puts array.my_all? { |num| num < 3 }
+puts array.my_all? { |num| num < 6 }
+
+puts array.my_any? { |num| num < 3 }
+
+puts array.my_none? { |num| num < 1 }

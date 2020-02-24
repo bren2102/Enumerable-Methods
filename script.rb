@@ -52,9 +52,18 @@ module Enumerable
   end
 
   def my_count
+    cont = 0
+    for i in 0...self.length
+      if yield(self[i])
+        cont+=1
+      end
+    end
+    cont
   end
+
   def my_map
   end
+
   def my_inject
   end
 end
@@ -71,6 +80,7 @@ end
 
 array=[2,4,5]
 
+=begin
 array.my_each do |num| puts num end
   
 array.my_each_with_index do |num,index| puts "#{num}, #{index}" end
@@ -82,3 +92,5 @@ puts array.my_all? { |num| num < 6 }
 puts array.my_any? { |num| num < 3 }
 
 puts array.my_none? { |num| num < 1 }
+=end
+puts array.my_count { |num| num }

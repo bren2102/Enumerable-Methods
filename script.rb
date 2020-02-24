@@ -69,13 +69,12 @@ module Enumerable
     temp = []
     i = 0
     while i < length
-      if my_proc
-        temp << my_proc.call(self[i])
-        i += 1
-      else
-        temp << yield(self[i])
-        i += 1
-      end
+      temp << if my_proc
+                my_proc.call(self[i])
+              else
+                yield(self[i])
+              end
+      i += 1
     end
     temp
   end
@@ -140,7 +139,7 @@ end
 puts result
 
 puts 'Test my_map method:'
-my_proc = Proc.new do |num|
+my_proc = proc do |num|
   num * 2
 end
 result = array.my_map(my_proc)

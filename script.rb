@@ -1,75 +1,90 @@
 module Enumerable
   def my_each
-    for i in 0...self.length
+    i = 0
+    while i < length
       yield(self[i])
+      i += 1
     end
   end
 
   def my_each_with_index
-    for i in 0...self.length
-      yield(self[i] , i)
+    i = 0
+    while i < length
+      yield(self[i], i)
+      i += 1
     end
   end
-  
+
   def my_select
-    temp=[]
-    for i in 0...self.length
-      if yield(self[i])
-        temp<<self[i]
-      end
+    temp = []
+    i = 0
+    while i < length
+      temp << self[i] if yield(self[i])
+      i += 1
     end
     temp
   end
 
   def my_all?
-    for i in 0...self.length
-      if yield(self[i]) && yield(self[i+1])
-        return true
-      else
-        return false
-      end
+    i = 0
+    while i < length
+      return true if yield(self[i]) && yield(self[i + 1])
+
+      i += 1
+      return false
     end
   end
- 
+
   def my_any?
-    for i in 0...self.length
-      if yield(self[i]) || yield(self[i+1])
-        return true
-      else
-        return false
-      end
+    i = 0
+    while i < length
+      return true if yield(self[i]) || yield(self[i + 1])
+
+      i += 1
+      return false
     end
   end
- 
+
   def my_none?
-    for i in 0...self.length
-      if !yield(self[i])
-        return true
-      else
-        return false
-      end
+    i = 0
+    while i < length
+      return true unless yield(self[i])
+
+      i += 1
+      return false
     end
   end
 
   def my_count
     cont = 0
-    for i in 0...self.length
-      if yield(self[i])
-        cont+=1
-      end
+    i = 0
+    while i < length
+      cont += 1 if yield(self[i])
+      i += 1
     end
     cont
   end
 
   def my_map
     temp = []
-    for i in 0...self.length
+    i = 0
+    while i < length
       temp << yield(self[i])
+      i += 1
     end
     temp
   end
 
   def my_inject
+    temp = 0
+    n = 0
+    i = 0
+    while i < length
+      puts yield(self[i], n)
+      puts 'end'
+      i += 1
+    end
+    temp
   end
 end
 
@@ -78,25 +93,59 @@ def multiply_els(array)
   aux = 1
   while i < array.length
     aux *= array[i]
-    i = i + 1
+    i += 1
   end
   print aux
 end
 
-array=[2,4,5]
+array = [2, 4, 5]
+
+puts 'Test my_each method:'
+array.my_each do |num|
+  puts num
+end
+
+puts 'Test my_each_with_index method'
+array.my_each_with_index do |num, index|
+  puts "#{num}, #{index}"
+end
+
+puts 'Test my_select method:'
+result = array.my_select do |num|
+  num < 3
+end
+puts result
+
+puts 'Test my_all method:'
+result = array.my_all? do |num|
+  num < 6
+end
+puts result
+
+puts 'Test my_any method:'
+result = array.my_any? do |num|
+  num < 3
+end
+puts result
+
+puts 'Test my_none method:'
+result = array.my_none? do |num|
+  num < 4
+end
+puts result
+
+puts 'Test my_each method:'
+result = array.my_count do |num|
+  num
+end
+puts result
+
+puts 'Test my_map method:'
+result = array.my_map do |num|
+  num * 2
+end
+puts result
 =begin
-array.my_each do |num| puts num end
-  
-array.my_each_with_index do |num,index| puts "#{num}, #{index}" end
-
-puts array.my_select { |num| num < 3 }
-
-puts array.my_all? { |num| num < 6 }
-
-puts array.my_any? { |num| num < 3 }
-
-puts array.my_none? { |num| num < 1 }
-
-puts array.my_count { |num| num }
+puts 'Test my_inject method:'
+puts array.my_inject { |num, n| num + n }
 =end
-puts array.my_map { |num| num * 2 }

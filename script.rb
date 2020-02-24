@@ -24,9 +24,9 @@ module Enumerable
   def my_all?
     for i in 0...self.length
       if yield(self[i]) && yield(self[i+1])
-        puts "Yes"
+        return true
       else
-        puts "No"
+        return false
     end
   end
   

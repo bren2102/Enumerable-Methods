@@ -62,6 +62,11 @@ module Enumerable
   end
 
   def my_map
+    temp = []
+    for i in 0...self.length
+      temp << yield(self[i])
+    end
+    temp
   end
 
   def my_inject
@@ -79,7 +84,6 @@ def multiply_els(array)
 end
 
 array=[2,4,5]
-
 =begin
 array.my_each do |num| puts num end
   
@@ -92,5 +96,7 @@ puts array.my_all? { |num| num < 6 }
 puts array.my_any? { |num| num < 3 }
 
 puts array.my_none? { |num| num < 1 }
-=end
+
 puts array.my_count { |num| num }
+=end
+puts array.my_map { |num| num * 2 }

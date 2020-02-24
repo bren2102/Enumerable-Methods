@@ -76,12 +76,10 @@ module Enumerable
   end
 
   def my_inject
-    temp = 0
-    n = 0
-    i = 0
+    i = 1
+    temp = self[0]
     while i < length
-      puts yield(self[i], n)
-      puts 'end'
+      temp = yield(temp, self[i])
       i += 1
     end
     temp
@@ -89,17 +87,13 @@ module Enumerable
 end
 
 def multiply_els(array)
-  i = 0
-  aux = 1
-  while i < array.length
-    aux *= array[i]
-    i += 1
+  array.my_inject do |num, n|
+    num * n
   end
-  print aux
 end
 
 array = [2, 4, 5]
-
+=begin
 puts 'Test my_each method:'
 array.my_each do |num|
   puts num
@@ -145,7 +139,12 @@ result = array.my_map do |num|
   num * 2
 end
 puts result
-=begin
+
 puts 'Test my_inject method:'
-puts array.my_inject { |num, n| num + n }
+result = array.my_inject do |num, n|
+  num + n
+end
+puts result
 =end
+puts 'Test multiply_els with my_inject'
+puts multiply_els(array)

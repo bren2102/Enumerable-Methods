@@ -1,3 +1,4 @@
+# rubocop:disable Style/CaseEquality, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 module Enumerable
   def my_each
     i = 0
@@ -31,34 +32,49 @@ module Enumerable
     temp
   end
 
-  def my_all?
+  def my_all?(arg = nil)
     i = 0
     while i < length
-      return true if yield(self[i]) && yield(self[i + 1])
-
+      if block_given?
+        return false unless yield(self[i])
+      elsif !arg.nil?
+        return false unless arg === self[i]
+      else
+        return false unless self[i]
+      end
       i += 1
-      return false
     end
+    true
   end
 
   def my_any?
     i = 0
     while i < length
-      return true if yield(self[i]) || yield(self[i + 1])
-
+      if block_given?
+        return true if yield(self[i])
+      elsif !arg.nil?
+        return true if arg === self[i]
+      else
+        return true if self[i]
+      end
       i += 1
-      return false
     end
+    false
   end
 
   def my_none?
     i = 0
     while i < length
-      return true unless yield(self[i])
-
+      if block_given?
+        return false if yield(self[i])
+      elsif !arg.nil?
+        return false if arg === self[i]
+      else
+        return false if self[i]
+      end
       i += 1
-      return false
     end
+    true
   end
 
   def my_count
@@ -102,8 +118,19 @@ def multiply_els(array)
   end
 end
 
-array = [2, 4, 5]
-puts [2, 4, 5].my_select
+# array = [4, 5, 5]
+
+puts [1, true, 'hi', []].my_all?
+
+puts %w[ant bear cat].my_all?(/c/)
+=begin
+puts [1, true, 'hi', []].my_all? != [1, true, 'hi', []].all?
+puts [1, false, 'hi', []].my_all? != [1, false, 'hi', []].all?
+puts [1,2,3,4,5].my_all?(Integer) != [1,2,3,4,5].all?(Integer)
+puts ["word",2,3,4,5].my_all?(Integer) != ["word",2,3,4,5].all?(Integer)
+puts ['saheed', 'oladele', 'suretrust'].my_all?(/d/) != ['saheed', 'oladele', 'suretrust'].all?(/d/)
+puts [1,2,3,4,5].my_all?(3) != [1,2,3,4,5].all?(3)
+=end
 =begin
 puts 'Test my_each method:'
 array.my_each do |num|
@@ -123,7 +150,7 @@ puts result
 
 puts 'Test my_all method:'
 result = array.my_all? do |num|
-  num < 6
+  num > 4
 end
 puts result
 
@@ -135,7 +162,7 @@ puts result
 
 puts 'Test my_none method:'
 result = array.my_none? do |num|
-  num < 4
+  num < 5
 end
 puts result
 
@@ -161,3 +188,5 @@ puts result
 puts 'Test multiply_els with my_inject'
 puts multiply_els(array)
 =end
+
+# rubocop:enable Style/CaseEquality, Metrics/CyclomaticComplexity, Metrics/CyclomaticComplexity

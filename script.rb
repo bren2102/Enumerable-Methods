@@ -47,7 +47,7 @@ module Enumerable
     true
   end
 
-  def my_any?
+  def my_any?(arg = nil)
     i = 0
     while i < length
       if block_given?
@@ -62,7 +62,7 @@ module Enumerable
     false
   end
 
-  def my_none?
+  def my_none?(arg = nil)
     i = 0
     while i < length
       if block_given?
@@ -77,11 +77,17 @@ module Enumerable
     true
   end
 
-  def my_count
+  def my_count(arg = nil)
     cont = 0
     i = 0
     while i < length
-      cont += 1 if yield(self[i])
+      if block_given?
+        cont += 1 if yield(self[i])
+      elsif !arg.nil?
+        cont += 1 if arg == self [i]
+      else
+        cont += 1
+      end
       i += 1
     end
     cont
@@ -120,9 +126,8 @@ end
 
 # array = [4, 5, 5]
 
-puts [1, true, 'hi', []].my_all?
-
-puts %w[ant bear cat].my_all?(/c/)
+puts [3,3,3,3].my_count(1)
+puts [1,2,3,4].my_count
 =begin
 puts [1, true, 'hi', []].my_all? != [1, true, 'hi', []].all?
 puts [1, false, 'hi', []].my_all? != [1, false, 'hi', []].all?

@@ -1,4 +1,4 @@
-# rubocop:disable Style/CaseEquality, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+# rubocop:disable Style/CaseEquality, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
 module Enumerable
   def my_each
     i = 0
@@ -54,8 +54,8 @@ module Enumerable
         return true if yield(self[i])
       elsif !arg.nil?
         return true if arg === self[i]
-      else
-        return true if self[i]
+      elsif self[i]
+        return true
       end
       i += 1
     end
@@ -97,6 +97,8 @@ module Enumerable
     temp = []
     i = 0
     while i < length
+      return to_enum unless block_given? || my_proc
+      
       temp << if my_proc
                 my_proc.call(self[i])
               else
@@ -107,11 +109,26 @@ module Enumerable
     temp
   end
 
-  def my_inject
-    i = 1
-    temp = self[0]
+  def my_inject(arg = nil, arg2 = nil)
+    if block_given? && arg.nil?
+      temp = self[0]
+      i = 1
+    elsif !arg.nil? && arg2.nil?
+      arg2 = arg
+      i = 1
+      temp = self[0]
+    else
+      temp = arg
+      i = 0
+    end
     while i < length
-      temp = yield(temp, self[i])
+      if block_given?
+        temp = yield(temp, self[i])
+      elsif !arg.nil? && !arg2.nil?
+        temp = temp.send(arg2, self[i])
+      else
+        temp = temp, self[i]
+      end
       i += 1
     end
     temp
@@ -124,10 +141,8 @@ def multiply_els(array)
   end
 end
 
-# array = [4, 5, 5]
+array = [4, 5, 5]
 
-puts [3,3,3,3].my_count(1)
-puts [1,2,3,4].my_count
 =begin
 puts [1, true, 'hi', []].my_all? != [1, true, 'hi', []].all?
 puts [1, false, 'hi', []].my_all? != [1, false, 'hi', []].all?
@@ -183,7 +198,7 @@ my_proc = proc do |num|
 end
 result = array.my_map(my_proc)
 puts result
-
+=end
 puts 'Test my_inject method:'
 result = array.my_inject do |num, n|
   num + n
@@ -192,6 +207,6 @@ puts result
 
 puts 'Test multiply_els with my_inject'
 puts multiply_els(array)
-=end
 
-# rubocop:enable Style/CaseEquality, Metrics/CyclomaticComplexity, Metrics/CyclomaticComplexity
+
+# rubocop:enable Style/CaseEquality, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity

@@ -3,28 +3,30 @@ module Enumerable
   def my_each
     i = 0
     while i < length
-      return to_enum unless block_given?
+      return to_enum(__method__) unless block_given?
 
       yield(self[i])
       i += 1
     end
+    self
   end
 
   def my_each_with_index
     i = 0
     while i < length
-      return to_enum unless block_given?
+      return to_enum(__method__) unless block_given?
 
       yield(self[i], i)
       i += 1
     end
+    self
   end
 
   def my_select
     temp = []
     i = 0
     while i < length
-      return to_enum unless block_given?
+      return to_enum(__method__) unless block_given?
 
       temp << self[i] if yield(self[i])
       i += 1
@@ -97,7 +99,7 @@ module Enumerable
     temp = []
     i = 0
     while i < length
-      return to_enum unless block_given? || my_proc
+      return to_enum(__method__) unless block_given? || my_proc
 
       temp << if my_proc
                 my_proc.call(self[i])
@@ -110,24 +112,24 @@ module Enumerable
   end
 
   def my_inject(arg = nil, arg2 = nil)
+    arr = self
+    arr = to_a if is_a? Range
     if block_given? && arg.nil?
-      temp = self[0]
+      temp = arr[0]
       i = 1
     elsif !arg.nil? && arg2.nil?
       arg2 = arg
       i = 1
-      temp = self[0]
+      temp = arr[0]
     else
       temp = arg
       i = 0
     end
-    while i < length
+    while i < arr.length
       temp = if block_given?
-               yield(temp, self[i])
+               yield(temp, arr[i])
              elsif !arg.nil? && !arg2.nil?
-               temp = temp.send(arg2, self[i])
-             else
-               temp = temp, self[i]
+               temp.send(arg2, arr[i])
              end
       i += 1
     end

@@ -117,13 +117,16 @@ module Enumerable
     if block_given? && arg.nil?
       temp = arr[0]
       i = 1
-    elsif !arg.nil? && arg2.nil?
+      p 'x'
+    elsif !arg.nil? && arg2.nil? && !block_given?
       arg2 = arg
       i = 1
       temp = arr[0]
-    else
+      p 'y'
+    elsif (block_given? && !arg.nil?) || (!arg.nil? && !arg2.nil?)
       temp = arg
       i = 0
+      p 'z'
     end
     while i < arr.length
       temp = if block_given?

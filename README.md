@@ -6,11 +6,6 @@ The purpose of this project is to rebuild and learn about Enumerable methods tha
 
 - Ruby
 
-## Usage
-
-Download the .rb file and run it from the terminal
-
-
 ## Author
 
 👤 **Brenda Yucra**
